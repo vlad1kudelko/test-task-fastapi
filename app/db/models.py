@@ -21,7 +21,8 @@ class Building(Base):                # Здание - Содержит в себ
     __tablename__ = 'building'
     id:           Mapped[int]        = mapped_column(BigInteger, primary_key=True, index=True)
     address:      Mapped[str]                                                                        # Адрес: Например - г. Москва, ул. Ленина 1, офис 3
-    position:     Mapped[str]                                                                        # Географические координаты: Местоположение здания должно быть в виде широты и долготы
+    position_x:   Mapped[float]                                                                      # Географические координаты: Местоположение здания должно быть в виде широты и долготы
+    position_y:   Mapped[float]                                                                      # Географические координаты: Местоположение здания должно быть в виде широты и долготы
     organisation                     = relationship('Organisation')
 
 class Activity(Base):                # Деятельность. Имеет название и может в древовидном виде вкладываться друг в друга
