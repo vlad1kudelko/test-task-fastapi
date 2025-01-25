@@ -1,8 +1,8 @@
 """seeding
 
-Revision ID: a5ee90dc0d72
-Revises: 0dcde0c034cf
-Create Date: 2025-01-25 13:50:40.382692
+Revision ID: 43f48d0cf268
+Revises: e2f85a289914
+Create Date: 2025-01-25 15:28:48.605125
 
 """
 from typing import Sequence, Union
@@ -12,17 +12,17 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'a5ee90dc0d72'
-down_revision: Union[str, None] = '0dcde0c034cf'
+revision: str = '43f48d0cf268'
+down_revision: Union[str, None] = 'e2f85a289914'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.bulk_insert(sa.table('building', sa.Column('address'), sa.Column('position')), [
-        {'address': 'Блюхера, 32/1',     'position': '55°45′02″ с. ш. 37°37′03″ в. д.'}, # 1
-        {'address': 'Маяковского, 28/1', 'position': '55°44′02″ с. ш. 37°38′03″ в. д.'}, # 2
-        {'address': 'Ленина, 45',        'position': '55°46′02″ с. ш. 37°36′03″ в. д.'}, # 3
+    op.bulk_insert(sa.table('building', sa.Column('address'), sa.Column('position_x'), sa.Column('position_y')), [
+        {'address': 'Блюхера, 32/1',     'position_x': 55.717435, 'position_y': 37.561014}, # 1
+        {'address': 'Маяковского, 28/1', 'position_x': 55.711333, 'position_y': 37.561858}, # 2
+        {'address': 'Ленина, 45',        'position_x': 55.713216, 'position_y': 37.550191}, # 3
     ])
 
     op.bulk_insert(sa.table('organisation', sa.Column('name'), sa.Column('phone'), sa.Column('id_building')), [
