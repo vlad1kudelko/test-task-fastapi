@@ -3,6 +3,8 @@ services:
     build: .
     ports:
       - 8000:8000
+    volumes:
+      - ./app/alembic/versions:/home/user/app/alembic/versions
     restart: always
 
   db:
@@ -11,8 +13,11 @@ services:
       POSTGRES_PASSWORD: example
     restart: always
 
-  adminer:
-    image: adminer
+  pgadmin:
+    image: dpage/pgadmin4
     ports:
-      - 8080:8080
+      - 8080:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'user@domain.com'
+      PGADMIN_DEFAULT_PASSWORD: example
     restart: always
