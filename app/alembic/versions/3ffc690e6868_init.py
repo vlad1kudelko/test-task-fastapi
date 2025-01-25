@@ -1,8 +1,8 @@
-"""initial
+"""init
 
-Revision ID: 136e0c2ee608
+Revision ID: 3ffc690e6868
 Revises: 
-Create Date: 2025-01-25 12:10:34.175939
+Create Date: 2025-01-25 12:40:19.235711
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '136e0c2ee608'
+revision: str = '3ffc690e6868'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -23,7 +23,8 @@ def upgrade() -> None:
     op.create_table('activity',
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('id_parent', sa.Integer(), nullable=False),
+    sa.Column('id_parent', sa.BigInteger(), nullable=False),
+    sa.ForeignKeyConstraint(['id_parent'], ['activity.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_activity_id'), 'activity', ['id'], unique=False)
@@ -38,7 +39,8 @@ def upgrade() -> None:
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('phone', sa.String(), nullable=False),
-    sa.Column('id_building', sa.Integer(), nullable=False),
+    sa.Column('id_building', sa.BigInteger(), nullable=False),
+    sa.ForeignKeyConstraint(['id_building'], ['building.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_organisation_id'), 'organisation', ['id'], unique=False)
@@ -46,8 +48,8 @@ def upgrade() -> None:
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('id_org', sa.BigInteger(), nullable=False),
     sa.Column('id_act', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['id_act'], ['organisation.id'], ),
-    sa.ForeignKeyConstraint(['id_org'], ['activity.id'], ),
+    sa.ForeignKeyConstraint(['id_act'], ['activity.id'], ),
+    sa.ForeignKeyConstraint(['id_org'], ['organisation.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_link_org_act_id'), 'link_org_act', ['id'], unique=False)
