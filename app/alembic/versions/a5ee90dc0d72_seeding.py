@@ -36,7 +36,7 @@ def upgrade() -> None:
         {'name': 'Молочная продукция', 'id_parent': 1   }, # 3
         {'name': 'Автомобили',         'id_parent': None}, # 4
         {'name': 'Грузовые',           'id_parent': 4   }, # 5
-        {'name': 'Легковые',           'id_parent': None}, # 6
+        {'name': 'Легковые',           'id_parent': 4   }, # 6
         {'name': 'Запчасти',           'id_parent': 6   }, # 7
         {'name': 'Аксессуары',         'id_parent': 6   }, # 8
     ])
