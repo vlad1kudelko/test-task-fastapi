@@ -6,7 +6,11 @@ from sqlalchemy import select
 from app.db.models import *
 from app.schemas import *
 
-app = FastAPI()
+app = FastAPI(
+    title='Тестовое задание по FastAPI',
+    description='Документация к проекту',
+    version='1.0.0',
+)
 
 def get_organisation():
     return select(
@@ -17,14 +21,8 @@ def get_organisation():
         Building.position_y,
     ).join(Building, Organisation.id_building == Building.id)
 
-@app.get('/organisation-in-building')
+@app.get('/organisation-in-building', summary='Список всех организаций находящихся в конкретном здании')
 async def organisation_in_building(building: int) -> list[Organisation_schemas]:
-    """
-    Список всех организаций находящихся в конкретном здании
-
-    :param building: ID здания
-    :return: Список организаций
-    """
     async with async_session_maker() as session:
         filtered_org = select(Organisation).filter(Organisation.id_building == building).subquery()
         query = select(
@@ -37,7 +35,7 @@ async def organisation_in_building(building: int) -> list[Organisation_schemas]:
         results = (await session.execute(query)).all()
         return results
 
-@app.get('/organisation-in-activity')
+@app.get('/organisation-in-activity', summary='Список всех организаций, которые относятся к указанному виду деятельности')
 async def organisation_in_activity(activity: int) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         query = get_organisation().join(
@@ -46,7 +44,7 @@ async def organisation_in_activity(activity: int) -> list[Organisation_schemas]:
         results = (await session.execute(query)).all()
         return results
 
-@app.get('/organisation-by-position')
+@app.get('/organisation-by-position', summary='Список организаций, которые находятся в заданном радиусе относительно указанной точки')
 async def organisation_by_position(x: float, y: float, radius: float) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         query = get_organisation()
@@ -56,7 +54,7 @@ async def organisation_by_position(x: float, y: float, radius: float) -> list[Or
         ).km <= radius ]
         return results_filter
 
-@app.get('/organisation-by-id')
+@app.get('/organisation-by-id', summary='Информация об организации по её идентификатору')
 async def organisation_by_id(id_organisation: int) -> Organisation_schemas:
     async with async_session_maker() as session:
         filtered_org = select(Organisation).filter(Organisation.id == id_organisation).subquery()
@@ -79,7 +77,7 @@ def recursion_activity(list_activity, id_activity, level):
         list_ret += recursion_activity(list_activity, act_id, level+1)
     return list_ret
 
-@app.get('/organisation-by-name-activity')
+@app.get('/organisation-by-name-activity', summary='Список всех организаций, по виду деятельности с учетом вложенности')
 async def organisation_by_name_activity(name: str) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         list_activity = (await session.execute(select(Activity.id, Activity.name, Activity.id_parent))).all()
@@ -91,7 +89,7 @@ async def organisation_by_name_activity(name: str) -> list[Organisation_schemas]
         results = (await session.execute(query)).all()
         return results
 
-@app.get('/organisation-by-name')
+@app.get('/organisation-by-name', summary='Поиск организации по названию')
 async def organisation_by_name(name: str) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         filtered_org = select(Organisation).filter(Organisation.name == name).subquery()
