@@ -6,11 +6,21 @@ services:
     volumes:
       - ./app/alembic/versions:/home/user/app/alembic/versions
     restart: always
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: root
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: always
 
   pgadmin:

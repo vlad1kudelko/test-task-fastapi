@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 
+from app.schemas import Organisation
+
 app = FastAPI()
 
-@app.get('/hello')
-async def api_hello():
+@app.get('/organisation-in-building')
+async def api_hello(building: int) -> list[Organisation]:
     return {'hello': 'world'}
