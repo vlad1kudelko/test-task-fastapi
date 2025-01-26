@@ -64,6 +64,27 @@ async def api_byid(id_organisation: int) -> Organisation_schemas:
         result = (await session.execute(query)).first()
         return result
 
+def recursion_activity(list_activity, id_activity, level):
+    if level >= 4:
+        return []
+    list_ids = [act.id for act in list_activity if act.id_parent == id_activity]
+    list_ret = [id_activity]
+    for act_id in list_ids:
+        list_ret += recursion_activity(list_activity, act_id, level+1)
+    return list_ret
+
+@app.get('/organisation-by-name-activity')
+async def api_bynameactivity(name: str) -> list[Organisation_schemas]:
+    async with async_session_maker() as session:
+        list_activity = (await session.execute(select(Activity.id, Activity.name, Activity.id_parent))).all()
+        id_activity = [act for act in list_activity if act.name == name][0].id
+        list_ids = recursion_activity(list_activity, id_activity, 1)
+        query = get_organisation().join(
+            Link_org_act, Organisation.id == Link_org_act.id_org
+        ).filter(Link_org_act.id_act.in_(list_ids)).distinct()
+        results = (await session.execute(query)).all()
+        return results
+
 @app.get('/organisation-by-name')
 async def api_byname(name: str) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
