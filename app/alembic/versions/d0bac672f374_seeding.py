@@ -1,8 +1,8 @@
 """seeding
 
-Revision ID: 43f48d0cf268
-Revises: e2f85a289914
-Create Date: 2025-01-25 15:28:48.605125
+Revision ID: d0bac672f374
+Revises: 2611edc3eaf7
+Create Date: 2025-01-26 06:33:52.018198
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '43f48d0cf268'
-down_revision: Union[str, None] = 'e2f85a289914'
+revision: str = 'd0bac672f374'
+down_revision: Union[str, None] = '2611edc3eaf7'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -47,6 +47,7 @@ def upgrade() -> None:
         {'id_org': 2, 'id_act': 1},
         {'id_org': 2, 'id_act': 2},
     ])
+
 
 def downgrade() -> None:
     pass

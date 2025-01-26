@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
-class Organisation(BaseModel):
+class Organisation_schemas(BaseModel):
     name: str
-    phone: list[str]
-    building_address: str
-    building_position_x: float
-    building_position_y: float
+    phone: str
+    address: str
+    position_x: float
+    position_y: float
