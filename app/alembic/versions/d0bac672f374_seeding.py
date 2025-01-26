@@ -27,7 +27,9 @@ def upgrade() -> None:
 
     op.bulk_insert(sa.table('organisation', sa.Column('name'), sa.Column('phone'), sa.Column('id_building')), [
         {'name': 'ООО “Рога и Копыта”', 'phone': '2-222-222, 3-333-333, 8-923-666-13-13', 'id_building': 1}, # 1
-        {'name': 'ООО “Копыта и Рога”', 'phone': '3-333-333, 2-222-222, 8-923-666-13-13', 'id_building': 2}, # 2
+        {'name': 'ИП “Рога”',           'phone': '2-222-222, 3-333-333, 8-923-666-13-13', 'id_building': 1}, # 2
+        {'name': 'ООО “Копыта и Рога”', 'phone': '3-333-333, 2-222-222, 8-923-666-13-13', 'id_building': 2}, # 3
+        {'name': 'ИП “Копыта”',         'phone': '2-222-222, 3-333-333, 8-923-666-13-13', 'id_building': 2}, # 4
     ])
 
     op.bulk_insert(sa.table('activity', sa.Column('name'), sa.Column('id_parent')), [
