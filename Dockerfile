@@ -13,4 +13,5 @@ WORKDIR /home/user
 COPY . .
 
 # CMD [ "python", "-u", "main.py" ]
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0" ]
+# CMD [ "uvicorn", "main:app", "--host", "0.0.0.0" ]
+CMD [ "bash", "start.sh" ]
