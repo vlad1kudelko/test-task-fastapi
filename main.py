@@ -8,6 +8,15 @@ from app.schemas import *
 
 app = FastAPI()
 
+def get_organisation():
+    return select(
+        Organisation.name,
+        Organisation.phone,
+        Building.address,
+        Building.position_x,
+        Building.position_y,
+    ).join(Building, Organisation.id_building == Building.id)
+
 @app.get('/organisation-in-building')
 async def api_building(building: int) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
@@ -25,15 +34,7 @@ async def api_building(building: int) -> list[Organisation_schemas]:
 @app.get('/organisation-in-activity')
 async def api_activity(activity: int) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
-        query = select(
-            Organisation.name,
-            Organisation.phone,
-            Building.address,
-            Building.position_x,
-            Building.position_y,
-        ).join(
-            Building, Organisation.id_building == Building.id
-        ).join(
+        query = get_organisation().join(
             Link_org_act, Organisation.id == Link_org_act.id_org
         ).filter(Link_org_act.id_act == activity)
         results = (await session.execute(query)).all()
@@ -42,13 +43,7 @@ async def api_activity(activity: int) -> list[Organisation_schemas]:
 @app.get('/organisation-by-position')
 async def api_activity(x: float, y: float, radius: float) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
-        query = select(
-            Organisation.name,
-            Organisation.phone,
-            Building.address,
-            Building.position_x,
-            Building.position_y,
-        ).join(Building, Organisation.id_building == Building.id)
+        query = get_organisation()
         results = (await session.execute(query)).all()
         results_filter = [ org for org in results if great_circle(
             (x, y), (org.position_x, org.position_y)
