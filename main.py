@@ -54,3 +54,17 @@ async def api_activity(x: float, y: float, radius: float) -> list[Organisation_s
             (x, y), (org.position_x, org.position_y)
         ).km <= radius ]
         return results_filter
+
+@app.get('/organisation-by-id')
+async def api_activity(id_organisation: int) -> Organisation_schemas:
+    async with async_session_maker() as session:
+        filtered_org = select(Organisation).filter(Organisation.id == id_organisation).subquery()
+        query = select(
+            filtered_org.c.name,
+            filtered_org.c.phone,
+            Building.address,
+            Building.position_x,
+            Building.position_y,
+        ).join(Building, filtered_org.c.id_building == Building.id)
+        result = (await session.execute(query)).first()
+        return result
