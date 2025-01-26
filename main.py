@@ -18,7 +18,13 @@ def get_organisation():
     ).join(Building, Organisation.id_building == Building.id)
 
 @app.get('/organisation-in-building')
-async def api_organisation_in_building(building: int) -> list[Organisation_schemas]:
+async def organisation_in_building(building: int) -> list[Organisation_schemas]:
+    """
+    Список всех организаций находящихся в конкретном здании
+
+    :param building: ID здания
+    :return: Список организаций
+    """
     async with async_session_maker() as session:
         filtered_org = select(Organisation).filter(Organisation.id_building == building).subquery()
         query = select(
@@ -32,7 +38,7 @@ async def api_organisation_in_building(building: int) -> list[Organisation_schem
         return results
 
 @app.get('/organisation-in-activity')
-async def api_organisation_in_activity(activity: int) -> list[Organisation_schemas]:
+async def organisation_in_activity(activity: int) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         query = get_organisation().join(
             Link_org_act, Organisation.id == Link_org_act.id_org
@@ -41,7 +47,7 @@ async def api_organisation_in_activity(activity: int) -> list[Organisation_schem
         return results
 
 @app.get('/organisation-by-position')
-async def api_organisation_by_position(x: float, y: float, radius: float) -> list[Organisation_schemas]:
+async def organisation_by_position(x: float, y: float, radius: float) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         query = get_organisation()
         results = (await session.execute(query)).all()
@@ -51,7 +57,7 @@ async def api_organisation_by_position(x: float, y: float, radius: float) -> lis
         return results_filter
 
 @app.get('/organisation-by-id')
-async def api_organisation_by_id(id_organisation: int) -> Organisation_schemas:
+async def organisation_by_id(id_organisation: int) -> Organisation_schemas:
     async with async_session_maker() as session:
         filtered_org = select(Organisation).filter(Organisation.id == id_organisation).subquery()
         query = select(
@@ -74,7 +80,7 @@ def recursion_activity(list_activity, id_activity, level):
     return list_ret
 
 @app.get('/organisation-by-name-activity')
-async def api_organisation_by_name_activity(name: str) -> list[Organisation_schemas]:
+async def organisation_by_name_activity(name: str) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         list_activity = (await session.execute(select(Activity.id, Activity.name, Activity.id_parent))).all()
         id_activity = [act for act in list_activity if act.name == name][0].id
@@ -86,7 +92,7 @@ async def api_organisation_by_name_activity(name: str) -> list[Organisation_sche
         return results
 
 @app.get('/organisation-by-name')
-async def api_organisation_by_name(name: str) -> list[Organisation_schemas]:
+async def organisation_by_name(name: str) -> list[Organisation_schemas]:
     async with async_session_maker() as session:
         filtered_org = select(Organisation).filter(Organisation.name == name).subquery()
         query = select(
