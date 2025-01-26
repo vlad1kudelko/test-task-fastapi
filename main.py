@@ -53,5 +53,4 @@ async def api_activity(x: float, y: float, radius: float) -> list[Organisation_s
         results_filter = [ org for org in results if great_circle(
             (x, y), (org.position_x, org.position_y)
         ).km <= radius ]
-        print(results, results_filter)
         return results_filter
