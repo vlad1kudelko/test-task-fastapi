@@ -46,8 +46,12 @@ def upgrade() -> None:
     op.bulk_insert(sa.table('link_org_act', sa.Column('id_org'), sa.Column('id_act')), [
         {'id_org': 1, 'id_act': 1},
         {'id_org': 1, 'id_act': 2},
-        {'id_org': 2, 'id_act': 1},
-        {'id_org': 2, 'id_act': 2},
+        {'id_org': 2, 'id_act': 3},
+        {'id_org': 2, 'id_act': 4},
+        {'id_org': 3, 'id_act': 1},
+        {'id_org': 3, 'id_act': 2},
+        {'id_org': 4, 'id_act': 3},
+        {'id_org': 4, 'id_act': 4},
     ])
 
 
