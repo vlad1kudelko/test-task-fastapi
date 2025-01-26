@@ -1,6 +1,7 @@
 alembic
 asyncpg
 fastapi[all]
+geopy
 psycopg2-binary
 pydantic-settings
 uvicorn[standard]

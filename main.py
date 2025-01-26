@@ -1,5 +1,6 @@
 from app.db.database import async_session_maker
 from fastapi import FastAPI
+from geopy.distance import great_circle
 from sqlalchemy import select
 
 from app.db.models import *
@@ -37,3 +38,20 @@ async def api_activity(activity: int) -> list[Organisation_schemas]:
         ).filter(Link_org_act.id_act == activity)
         results = (await session.execute(query)).all()
         return results
+
+@app.get('/organisation-by-position')
+async def api_activity(x: float, y: float, radius: float) -> list[Organisation_schemas]:
+    async with async_session_maker() as session:
+        query = select(
+            Organisation.name,
+            Organisation.phone,
+            Building.address,
+            Building.position_x,
+            Building.position_y,
+        ).join(Building, Organisation.id_building == Building.id)
+        results = (await session.execute(query)).all()
+        results_filter = [ org for org in results if great_circle(
+            (x, y), (org.position_x, org.position_y)
+        ).km <= radius ]
+        print(results, results_filter)
+        return results_filter
